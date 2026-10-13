@@ -1776,7 +1776,11 @@ static const struct vm_operations_struct vm_ops = {
 };
 
 static const struct file_operations fops = {
-	.owner              = THIS_MODULE,
+	/* [owner-patch] 本机 msm_drm 模块 refcnt 异常为 0（/proc/modules 显示 -1），
+	 * 导致 fops_get() 里的 try_module_get() 永远失败 → drm_stub_open 返回 ENODEV
+	 * → 所有进程（含 root）都打不开 /dev/dri/card0。
+	 * 置 NULL 让 fops_get() 直通。*/
+	.owner              = NULL,
 	.open               = drm_open,
 	.release            = msm_release,
 	.unlocked_ioctl     = drm_ioctl,
