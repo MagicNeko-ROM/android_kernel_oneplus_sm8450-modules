@@ -8,6 +8,7 @@
 #include <linux/proc_fs.h>
 #include <linux/time.h>
 #include <linux/rtc.h>
+#include <linux/timekeeping.h>
 struct cam_flash_ctrl *vendor_flash_ctrl = NULL;
 struct cam_flash_ctrl *front_flash_ctrl = NULL;
 #endif
@@ -33,10 +34,10 @@ static ssize_t flash_on_off(struct cam_flash_ctrl *flash_ctrl)
 
 	ktime_get_real_ts64(&ts);
 	rtc_time_to_tm(ts.tv_sec, &tm);
-	pr_info("flash_mode %d,%d-%02d-%02d %02d:%02d:%02d.%09lu UTC\n",
+	pr_info("flash_mode %d,%d-%02d-%02d %02d:%02d:%02d.%09lld UTC\n",
 		flash_mode,
 		tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-		tm.tm_hour, tm.tm_min, tm.tm_sec, ts.tv_nsec);
+		tm.tm_hour, tm.tm_min, tm.tm_sec, (long long)ts.tv_nsec);
 	if(pre_flash_mode == flash_mode)
 		return rc;
 

@@ -16,7 +16,7 @@ struct timespec {
 };
 #endif
 
-struct timeval {
+struct ois_timeval {
 	__kernel_old_time_t	tv_sec;		/* seconds */
 	__kernel_suseconds_t	tv_usec;	/* microseconds */
 };
@@ -27,8 +27,8 @@ struct itimerspec {
 };
 
 struct itimerval {
-	struct timeval it_interval;/* timer interval */
-	struct timeval it_value;	/* current value */
+	struct ois_timeval it_interval;/* timer interval */
+	struct ois_timeval it_value;	/* current value */
 };
 #endif
 
@@ -2470,7 +2470,7 @@ struct hall_info
     uint32_t mHalldata;
 };
 
-void timeval_add(struct timeval *tv,int32_t usec)
+void timeval_add(struct ois_timeval *tv,int32_t usec)
 {
 	if (usec > 0) {
 		if (tv->tv_usec + usec >= 1000*1000) {
@@ -2489,7 +2489,7 @@ void timeval_add(struct timeval *tv,int32_t usec)
 	}
 }
 
-void do_gettimeofday(struct timeval *tv)
+void do_gettimeofday(struct ois_timeval *tv)
 {
 	struct timespec64 now;
 
@@ -2510,9 +2510,9 @@ int OISPollThreadBu24721(void *arg)
 	int                    offset;
 	uint32_t               delayCount;
 	uint32_t               delayTime;//usec
-	struct timeval         endTime;
-	struct timeval         estimateLastEndTime;
-	struct timeval         LastPacketEndTime;
+	struct ois_timeval         endTime;
+	struct ois_timeval         estimateLastEndTime;
+	struct ois_timeval         LastPacketEndTime;
 	int32_t                gap_usec;
 	uint32_t               fifo_size_in_driver;
 	uint32_t               kfifo_in_len;
